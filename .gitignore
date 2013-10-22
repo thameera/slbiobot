@@ -1,0 +1,9 @@
+node_modules/
+public/stylesheets/*.css
+
+configs.txt
+users.txt
+
+*.swp
+*.vim
+

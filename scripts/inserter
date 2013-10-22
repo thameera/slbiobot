@@ -1,0 +1,40 @@
+#!/usr/bin/env python
+
+# This script reads a list of twitter screen names from NEW_FILE and
+# populates them in USER_LIST_FILE if they're missing there
+
+import os
+
+USER_LIST_FILE='users.txt'
+NEW_FILE='new.txt'
+
+fh = open(USER_LIST_FILE, 'r')
+fnew = open(NEW_FILE, 'r')
+
+orig=[]
+
+while 1:
+    name = fh.readline().strip()
+    if not name: break
+    orig.append(name.lower())
+    _ = fh.readline()
+
+fh.close()
+
+fh = open(USER_LIST_FILE, 'a')
+count = 0
+
+while 1:
+    name = fnew.readline().strip().lower()
+    if not name: break
+    if name in orig:
+        print "%s is already there" % name
+    else:
+        fh.write("%s\n-\n" % name)
+        count += 1
+
+print "%d total new entries" % count
+
+fh.close()
+fnew.close()
+
