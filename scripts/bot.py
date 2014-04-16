@@ -144,13 +144,14 @@ def lookupUsers():
     for seg in segs:
         results = api.UsersLookup(user_id=seg)
 
-        # Some names might be missing from the results
-        # eg: some idiots change their screen names from time to time
+        # Some ids might be missing from the results
+        # eg: Deleted accounts
         if len(seg) != len(results):
             sys.stderr.write("Missing names detected: %d vs %d\n"% (len(seg), len(results)))
-            reslist = list(res.screen_name.lower() for res in results)
+            reslist = list(str(res.id) for res in results)
             # Get the list of names that we requested but was absent in the results
-            missing = [x for x in seg if x not in reslist] # pissu hadenawa O_o
+            missing_ids = [x for x in seg if x not in reslist] # pissu hadenawa O_o
+            missing = [x + ' (' + user_names[x] + ')' for x in missing_ids]
             sys.stderr.write("Missing   : %s\n" % str(missing))
             sys.stderr.flush()
             # This ain't fatal, so we can continue with the available results
