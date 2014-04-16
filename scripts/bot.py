@@ -19,17 +19,19 @@ EXCLAMS=['Lookie!', 'Hey look!', 'Bang!', 'Wheee!', 'Whoa!', 'Holy moly!', 'Shaa
 MAX_REQ=100  # Maximum num of users to lookup in a single query. Max allowed is 100.
 
 user_ids = []
+user_names = {}
 bios = {}
 shouldWrite = False
 
 Change = namedtuple("Change", "user old new")
+
+UsernameChange = namedtuple("UsernameChange", "old new")
 
 def getRandomExclam():
     return EXCLAMS[randint(0, len(EXCLAMS)-1)]
 
 def loadUserList():
     global user_ids
-    global bios
 
     if not os.path.exists(USER_LIST_FILE):
         sys.stderr.write("User file [%s] not found. Exiting...\n" % USER_LIST_FILE)
@@ -58,6 +60,8 @@ def loadUserList():
 
 def loadBioList():
     global bios
+    global user_names
+
     if not os.path.exists(BIOS_LIST_FILE):
         sys.stderr.write("Bios file [%s] not found. Exiting...\n" % BIOS_LIST_FILE)
         sys.stderr.flush()
@@ -75,6 +79,7 @@ def loadBioList():
         user_id = fh.readline().strip()
         if not user_id:
             break
+        user_name = fh.readline().strip()
         bio = fh.readline().strip()
 
         if user_id not in user_ids:
@@ -83,10 +88,12 @@ def loadBioList():
             continue
 
         bios[user_id] = bio
+        user_names[user_id] = user_name
 
 
 def writeBios():
     global user_ids
+    global user_names
     global bios
 
     try:
@@ -101,18 +108,24 @@ def writeBios():
     for u in user_ids:
         fh.write("%s\n" % u)
         try:
+            fh.write("%s\n" % user_names[u])
+        except KeyError:
+            sys.stderr.write("No user_name found for user %s\n" % u)
+            sys.stderr.flush()
+            fh.write("\n")
+        try:
             fh.write("%s\n" % bios[u])
         except KeyError:
             sys.stderr.write("No bio found for user %s\n" % u)
             sys.stderr.flush()
             fh.write("\n")
-            continue
 
     fh.close()
 
 # Main function that checks twitter for bio changes
 def lookupUsers():
     global user_ids
+    global user_names
     global bios
     global api
     global shouldWrite
@@ -126,6 +139,7 @@ def lookupUsers():
         tmp = tmp[MAX_REQ:]
 
     changes = []
+    unchanges = []
 
     for seg in segs:
         results = api.UsersLookup(user_id=seg)
@@ -154,11 +168,12 @@ def lookupUsers():
             if uid not in bios.keys():
                 print "New entry %s" % scname
                 shouldWrite = True
+                user_names[uid] = scname
                 bios[uid] = desc
 
             # There's a change!
             elif bios[uid] != desc:
-                print "Changed! %s" % scname
+                print "Changed bio! %s" % scname
                 shouldWrite = True
 
                 old = bios[uid]
@@ -169,10 +184,18 @@ def lookupUsers():
 
                 # Add to list of changes
                 changes.append(Change(scname, old, desc))  # add name for changes instead of uid for tweeting
+            elif user_names[uid] != scname and user_names[uid] != '':
+                print "Changed username! %s" % scname
+                shouldWrite = True
+
+                old = user_names[uid]
+                user_names[uid] = scname
+
+                unchanges.append(UsernameChange(old, scname))
             else:
                 pass
 
-    return changes
+    return changes, unchanges
 
 def tweet(changes):
     global api
@@ -181,6 +204,14 @@ def tweet(changes):
         exclam = getRandomExclam()
         url = "http://slbiobot.herokuapp.com/d/%s/%s/%s" % (ch.user, ch.old, ch.new)
         tw = "%s @%s has changed the bio! %s" % (exclam, ch.user, url)
+        api.PostUpdate(tw)
+
+def tweetun(unchanges):
+    global api
+
+    for ch in unchanges:
+        exclam = getRandomExclam()
+        tw = "%s @%s has changed the username to @%s!" % (exclam, ch.old, ch.new)
         api.PostUpdate(tw)
 
 # __main__
@@ -214,7 +245,7 @@ api = twitter.Api(consumer_key=keys[0],
 loadUserList()
 loadBioList()
 # Check for changes
-changes = lookupUsers()
+changes, unchanges = lookupUsers()
 
 # Take action!
 if not options.fdry:
@@ -222,6 +253,7 @@ if not options.fdry:
         writeBios()
         if not options.dry:
             tweet(changes)
+            tweetun(unchanges)
         else:
             print "Not tweeting in dry run mode"
     else:
