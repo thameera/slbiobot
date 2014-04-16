@@ -105,6 +105,7 @@ def writeBios():
         except KeyError:
             sys.stderr.write("No bio found for user %s\n" % u)
             sys.stderr.flush()
+            fh.write("\n")
             continue
 
     fh.close()
