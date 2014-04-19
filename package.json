@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "dependencies": {
     "express": "3.4.x",
-    "jade": "*",
-    "less-middleware": "*",
-    "diff": "*"
+    "jade": "0.35.*",
+    "less-middleware": "0.1.*",
+    "diff": "1.0.*"
   },
   "engines": {
     "node": "0.10.x",
