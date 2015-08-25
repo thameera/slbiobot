@@ -203,7 +203,7 @@ def tweet(changes):
 
     for ch in changes:
         exclam = getRandomExclam()
-        url = "http://slbiobot.herokuapp.com/d/%s/%s/%s" % (ch.user, ch.old, ch.new)
+        url = "http://bio.bestatlk.com/d/%s/%s/%s" % (ch.user, ch.old, ch.new)
         tw = "%s @%s has changed the bio! %s" % (exclam, ch.user, url)
         api.PostUpdate(tw)
 
