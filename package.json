@@ -1,14 +1,17 @@
 {
   "name": "slbiobot",
   "version": "0.0.1",
+  "description": "SL Biobot - sniffing around Sri Lankan tweeps' bios like a boss",
+  "main": "web.js",
+  "author": "Thameera Senanayaka",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thameera/slbiobot"
+  },
   "dependencies": {
     "express": "3.4.x",
     "jade": "0.35.*",
     "less-middleware": "0.1.*",
     "diff": "1.0.*"
-  },
-  "engines": {
-    "node": "0.10.x",
-    "npm": "1.3.x"
   }
 }
