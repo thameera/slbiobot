@@ -9,9 +9,13 @@
     "url": "https://github.com/thameera/slbiobot"
   },
   "dependencies": {
+    "chai": "^3.4.1",
+    "diff": "1.0.*",
     "express": "3.4.x",
     "jade": "0.35.*",
     "less-middleware": "0.1.*",
-    "diff": "1.0.*"
+    "mocha": "^2.3.4",
+    "rewire": "^2.5.1",
+    "sinon": "^1.17.2"
   }
 }
