@@ -13,7 +13,7 @@ describe('Bios-Reader tests', function() {
     readFileSync: (path) => {
       should.exist(path);
       path.should.equal(filename);
-      return '100\nthameera\nsome text\n205\njack\noh hi';
+      return '100\nthameeRa\nsome text\n205\njack\noh hi';
     }
   };
 
@@ -47,8 +47,11 @@ describe('Bios-Reader tests', function() {
     });
 
     it('should return true when username exists', function() {
-      bios.usernameExists('thameera').should.be.true;
       bios.usernameExists('jack').should.be.true;
+    });
+
+    it('should return true when username exists case-insensitive', function() {
+      bios.usernameExists('Thameera').should.be.true;
     });
 
     it('should return false when username does not exist', function() {

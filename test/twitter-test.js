@@ -11,7 +11,7 @@ const Twitter = require('../scripts/lib/twitter');
 const readConfig = require('../scripts/lib/read-config');
 const config = readConfig('./scripts/config.ini').Twitter;
 
-describe('Twitter tests', function() {
+xdescribe('Twitter tests', function() {
 
   this.timeout(10000);
 

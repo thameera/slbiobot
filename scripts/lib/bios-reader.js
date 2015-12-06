@@ -17,9 +17,11 @@ const BiosReader = class {
 
   usernameExists(name) {
     // Names are in the every second row of each three rows
-    const names = this.contents.split('\n').filter( (val, id) => id % 3 === 1 );
+    const names = this.contents.split('\n')
+      .filter( (val, id) => id % 3 === 1 )
+      .map( (s) => s.toLowerCase() );
 
-    return names.indexOf(name) >= 0;
+    return names.indexOf(name.toLowerCase()) >= 0;
   }
 };
 
