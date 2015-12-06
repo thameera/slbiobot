@@ -12,7 +12,7 @@ const DEFAULT_FILE_NAME = 'config.ini';
 
 let readConfig = function(filename) {
   filename = filename || DEFAULT_FILE_NAME;
-  const contents = fs.readFileSync(filename);
+  const contents = fs.readFileSync(filename, 'utf-8');
 
   return ini.parse(contents);
 };

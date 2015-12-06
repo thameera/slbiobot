@@ -12,7 +12,7 @@ const DEFAULT_FILE_NAME = 'bios.txt';
 const BiosReader = class {
   constructor(filename) {
     filename = filename || DEFAULT_FILE_NAME;
-    this.contents = fs.readFileSync(filename).toString();
+    this.contents = fs.readFileSync(filename, 'utf-8');
   }
 
   usernameExists(name) {
