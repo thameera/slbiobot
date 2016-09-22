@@ -1,6 +1,4 @@
-node_modules/
 coverage/
-public/stylesheets/*.css
 
 bios.txt
 configs.txt
