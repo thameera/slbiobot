@@ -10,3 +10,5 @@ docker run --name biobot -v $PWD/nginx-sample.conf:/etc/nginx/nginx.conf:ro -v $
 ```
 
 Now visit http://localhost:8080 in the browser.
+
+To start the container later on, you can use `docker start biobot`, or `docker restart biobot` to restart after a change to the nginx config.
