@@ -1,4 +1,4 @@
 #!/bin/bash
 
-scp users.txt rmn:bios
-scp blacklist.txt rmn:bios
+scp users.txt rmn:bio
+scp blacklist.txt rmn:bio
