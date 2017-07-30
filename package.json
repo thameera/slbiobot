@@ -8,6 +8,9 @@
     "type": "git",
     "url": "https://github.com/thameera/slbiobot"
   },
+  "scripts": {
+    "test": "mocha"
+  },
   "dependencies": {
     "bluebird": "^3.0.6",
     "chai": "^3.4.1",
