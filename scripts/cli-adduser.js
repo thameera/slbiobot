@@ -15,11 +15,13 @@ const BiosReader = require('./lib/bios-reader');
 const readConfig = require('./lib/read-config');
 const Twitter = require('./lib/twitter');
 const Userlist = require('./lib/userlist');
+const Blacklist = require('./lib/blacklist');
 
 const biosReader = new BiosReader();
 const config = readConfig().Twitter;
 const twitter = new Twitter(config);
 const userlist = new Userlist();
+const blacklist = new Blacklist();
 
 let usernames;
 
@@ -53,6 +55,10 @@ usernames.forEach( username => {
 
   twitter.getIDByScreenName(username)
     .then( id => {
+      if (blacklist.isBlacklisted(id)) {
+        warn(`'${username}' is blacklisted`);
+        return;
+      }
       userlist.appendUser(id);
       userlist.save();
       info(`'${username}' added`);
