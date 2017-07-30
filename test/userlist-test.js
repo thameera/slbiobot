@@ -78,6 +78,25 @@ describe('Userlist tests', function() {
     });
   });
 
+  describe('removeUser', function() {
+    let userlist, revert;
+
+    beforeEach( () => {
+      revert = Userlist.__set__('fs', fsMock);
+      userlist = new Userlist(filename);
+    });
+
+    afterEach( () => {
+      revert();
+    });
+
+    it('should remove user from list', function() {
+      userlist.doesUserExist(32765419).should.be.true;
+      userlist.removeUser(32765419);
+      userlist.doesUserExist(32765419).should.be.false;
+    });
+  });
+
   describe('save', function() {
     let userlist, revert;
 

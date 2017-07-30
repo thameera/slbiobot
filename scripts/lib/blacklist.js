@@ -1,15 +1,15 @@
 'use strict';
 
 /*
- * userlist
- * Reads, operates on and writes back users list
+ * blacklist
+ * Reads, operates on and writes back blacklist
  */
 
 let fs = require('fs');
 
-const DEFAULT_FILE_NAME = 'users.txt';
+const DEFAULT_FILE_NAME = 'blacklist.txt';
 
-const Userlist = class {
+const Blacklist = class {
   constructor(filename) {
     this.filename = filename || DEFAULT_FILE_NAME;
     const contents = fs.readFileSync(this.filename, 'utf-8');
@@ -18,18 +18,14 @@ const Userlist = class {
       .map( s => Number(s) );
   }
 
-  doesUserExist(userid) {
-    return this.users.indexOf(userid) >= 0;
+  isBlacklisted(userid) {
+    return this.users.includes(userid);
   }
 
-  appendUser(userid) {
-    if (!this.doesUserExist(userid)) {
+  blacklistUser(userid) {
+    if (!this.isBlacklisted(userid)) {
       this.users.push(userid);
     }
-  }
-
-  removeUser(userid) {
-    this.users = this.users.filter( u => u !== userid );
   }
 
   save() {
@@ -38,5 +34,5 @@ const Userlist = class {
   }
 };
 
-module.exports = Userlist;
+module.exports = Blacklist;
 

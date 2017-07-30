@@ -6,6 +6,7 @@ bios.txt
 configs.txt
 config.ini
 users.txt
+blacklist.txt
 
 *.swp
 *.vim
